@@ -1,64 +1,117 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+The code is done in Laravel 9.x
+-I have used VS Code for coding and Postman for testing the API.
+-The API's are available for the CRUD operation on Posts and a User Register and Login.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Instructions:
+-Please make sure you config the db in your machine, and update the env file accordingly
+-You can run the migration files to migrate all the db tables.
+-Run the app using php artisan serve, you will get the app url as something like, "http://127.0.0.1:8000"
 
-## About Laravel
+Tips to note while using Postman
+-Please ensure you set the Header "Accept" as "application/json" and "Content-Type" as "application/json" in your Postman
+-If you get a different app url Please replace the that with the one I'm sharing below.
+-Please add Bearer Token from the Authorization tab and populate it with the token received from login/register API, for every other API's
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Configuring the throttling limit
+-Please change the value of "THROTTLE_LIMIT_PER_SEC" in the config/constants.php file. Default value is set to 5. So user wont be able to send more than 5 requests.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-Open Postman and run the following API's to create a user
+[POST] User Registration
+http://127.0.0.1:8000/api/auth/register
+Request Body
+{
+    "name": "John Doe",
+    "email": "john.doe@test.com",
+    "password" : "P@12345"
+}
+Sample Output
+{
+    "status": true,
+    "message": "User created successfully",
+    "token": "4|jtooOieAgoCn65pxQxK4L81bXdVx2c7pfozadL9C"
+}
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+[POST] User Login
+http://127.0.0.1:8000/api/auth/login 
+Request Body
+{
+    "email": "john.doe@test.com",
+    "password" : "P@12345"
+}
+Sample Output
+{
+    "status": true,
+    "message": "User logged in successfully",
+    "token": "5|U2yDcPxlgsaDyssGDQQz0OfVHr27UrV7ZJtnt61N"
+}
 
-## Learning Laravel
+[POST] Create Post
+http://127.0.0.1:8000/api/posts/
+-Please ensure you add the Bearer token from Authorization tab and use the token you received from login/register API
+Request Body
+{
+    "title": "My first Post",
+    "description": "My first post body."
+}
+Sample Output
+{
+    "status": true,
+    "message": "Post created successfully",
+    "post": {
+        "title": "My first Post",
+        "description": "My first post body.",
+        "updated_at": "2022-05-22T11:24:45.000000Z",
+        "created_at": "2022-05-22T11:24:45.000000Z",
+        "id": 4
+    }
+}
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+[GET] Get all Posts
+http://127.0.0.1:8000/api/posts/
+-Please ensure you add the Bearer token from Authorization tab and use the token you received from login/register API
+No Request Body
+Sample Output
+{
+    "status": true,
+    "posts": [
+        {
+            "id": 2,
+            "title": "My Second Post",
+            "description": "My second post content",
+            "created_at": "2022-05-22T06:03:15.000000Z",
+            "updated_at": "2022-05-22T06:03:15.000000Z"
+        }
+    ]
+}
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+[PUT] Update a Post
+http://127.0.0.1:8000/api/posts/4
+-Please ensure you add the Bearer token from Authorization tab and use the token you received from login/register API
+Request Body
+{
+    "title": "My First Post edited",
+    "description": "My first post content edited"
+}
+Sample Output
+{
+    "status": true,
+    "message": "Post updated successfully",
+    "post": {
+        "id": 4,
+        "title": "My First Post edited",
+        "description": "My first post content edited",
+        "created_at": "2022-05-22T11:24:45.000000Z",
+        "updated_at": "2022-05-22T11:36:20.000000Z"
+    }
+}
 
-## Laravel Sponsors
+[DELETE] Delete a Post
+http://127.0.0.1:8000/api/posts/4
+-Please ensure you add the Bearer token from Authorization tab and use the token you received from login/register API
+No Request Body
+Sample Output
+{
+    "status": true,
+    "message": "Post deleted successfully"
+}
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
