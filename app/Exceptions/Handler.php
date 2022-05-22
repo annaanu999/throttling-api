@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -45,6 +46,10 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof ModelNotFoundException && $request->wantsJson()) {
             return response()->json(['message' => 'Not Found!'], 404);
+        }
+
+        if ($exception instanceof ThrottleRequestsException && $request->wantsJson()) {
+            return  response()->json(['message' => 'Too many attempts, please slow down the request.',], 429);
         }
 
         return parent::render($request, $exception);

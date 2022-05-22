@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,18 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
+
+        /*
+            * Allowing custom configured limit per second is set to be a cosntant
+            * We calculate the request that can be allowed per minute based on the constant
+            * Example Allow 1500/60 = 25 req/sec
+        */      
+        RateLimiter::for('custom_limit', function (Request $request) {
+            $allowed_request_per_sec = Config::get('constants.THROTTLE_LIMIT_PER_SEC');
+            $allowed_request_per_minute = round($allowed_request_per_sec * 60);
+
+            return Limit::perMinute($allowed_request_per_sec)->by(optional($request->user())->id ?: $request->ip());
         });
     }
 }

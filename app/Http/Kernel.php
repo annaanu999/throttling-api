@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
 
 class Kernel extends HttpKernel
 {
@@ -41,7 +42,8 @@ class Kernel extends HttpKernel
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'throttle:api',
+            //'throttle:api',
+            'throttle:custom_limit',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
