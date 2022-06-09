@@ -61,16 +61,11 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
 
-        /*
-            * Allowing custom configured limit per second is set to be a cosntant
-            * We calculate the request that can be allowed per minute based on the constant
-            * Example Allow 1500/60 = 25 req/sec
-        */      
+        
         RateLimiter::for('custom_limit', function (Request $request) {
-            $allowed_request_per_sec = Config::get('constants.THROTTLE_LIMIT_PER_SEC');
-            $allowed_request_per_minute = round($allowed_request_per_sec * 60);
+            $allowed_request_per_minute = Config::get('constants.THROTTLE_LIMIT_PER_MINUTE');
 
-            return Limit::perMinute($allowed_request_per_sec)->by(optional($request->user())->id ?: $request->ip());
+            return Limit::perMinute($allowed_request_per_minute)->by(optional($request->user())->id ?: $request->ip());
         });
     }
 }

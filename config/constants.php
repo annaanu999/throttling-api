@@ -1,4 +1,4 @@
 <?php
 return [
-        'THROTTLE_LIMIT_PER_SEC' => '5',
+        'THROTTLE_LIMIT_PER_MINUTE' => '5',
 ];
